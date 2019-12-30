@@ -63,6 +63,13 @@ class GameFragment : Fragment() {
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })
+        viewModel.gameFinished.observe(this, Observer { hasFinished ->
+            if (hasFinished) {
+                gameFinished()
+                viewModel.gameFinishCompeted()
+            }
+
+        })
         viewModel.word.observe(this, Observer { newWord ->
             binding.wordText.text = newWord
 
@@ -71,14 +78,6 @@ class GameFragment : Fragment() {
 
     }
 
-    /**
-     * Resets the list of words and randomizes the order
-     */
-
-
-    /**
-     * Called when the game is finished
-     */
     private fun gameFinished() {
         val action = GameFragmentDirections
                 .actionGameToScore(viewModel.score.value ?: 0)
