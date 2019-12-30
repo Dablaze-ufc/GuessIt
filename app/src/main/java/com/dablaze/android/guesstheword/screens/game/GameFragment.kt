@@ -17,6 +17,7 @@
 package com.dablaze.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,13 +53,12 @@ class GameFragment : Fragment() {
         Log.i("GameFragment", " Called ViewModelProviders.Of")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
+        binding.gameViewModel = viewModel
 
-        binding.correctButton.setOnClickListener {
-            viewModel.onCorrect()
-        }
-        binding.skipButton.setOnClickListener {
-            viewModel.onSkip()
-        }
+        viewModel.currentTime.observe(this, Observer { newTime ->
+            DateUtils.formatElapsedTime(newTime)
+            binding.timerText.text = DateUtils.formatElapsedTime(newTime)
+        })
 
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
